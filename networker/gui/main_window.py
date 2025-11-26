@@ -6,7 +6,15 @@ class MainWindow:
         self.root.title("net-worker")
         self.service = service
 
-        tk.Label(text="kill me please").pack()
+        # init frames
+        self.frameButtons = tk.Frame(self.root)
+        self.frameGraph = tk.Frame(self.root)
+
+        self.frameButtons.pack()
+
+        # add stuff to frames
+        tk.Button(self.frameButtons, text="Load Network", command=service.placeholder).pack()
+
     
     def start(self):
         self.root.mainloop();
