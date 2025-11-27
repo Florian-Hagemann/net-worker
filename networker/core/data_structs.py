@@ -20,9 +20,9 @@ class Graph:
         self.nodes.pop(node.id, None)
         self.edges.pop(node.id, None)
 
-    def addEdge(self, nodeIdA, nodeIdB):
-        self.edges[nodeIdA].add(nodeIdB)
-        self.edges[nodeIdB].add(nodeIdA)
+    def addEdge(self, nodeIdA, nodeIdB, weight):
+        self.edges[nodeIdA][nodeIdB] = weight
+        self.edges[nodeIdB][nodeIdA] = weight
     
     def deleteEdge(self, nodeIdA, nodeIdB):
         self.edges[nodeIdA].discard(nodeIdB)
