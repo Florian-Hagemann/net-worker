@@ -21,6 +21,14 @@ class MainWindow:
             self.service.addNode(nodeName)
             self.updateNodeView()
 
+    def editEdges(self):
+        popup = tk.Toplevel(self.root)
+        popup.title("Edit Edges")
+        popup.geometry("250x150")
+
+        combo = ttk.Combobox(popup, values=self.service.get_node_names())
+        combo.pack()
+
     def editNodes(self):
         popup = tk.Toplevel(self.root)
         popup.title("Edit Nodes")
@@ -70,6 +78,7 @@ class MainWindow:
         tk.Button(self.frameButtons, text="Find Route", command=service.placeholder).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Add Node", command=self.addNode).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Edit Nodes", command=self.editNodes).pack(pady=5, side="left")
-    
+        tk.Button(self.frameButtons, text="Edit Edges", command=self.editEdges).pack(pady=5, side="left")
+
     def start(self):
         self.root.mainloop();
