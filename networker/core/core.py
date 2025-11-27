@@ -1,8 +1,14 @@
 from .loader import *
+from .data_structs import Graph, Node
 
 class Service:
     def __init__(self):
-        print("start service")
+        self.graph = Graph()
     
+    def addNode(self, nodeName):
+        node = Node(nodeName)
+        print(f"Added {nodeName} with the ID {node.id}")
+        self.graph.addNode(node)
+
     def placeholder(self):
         print("hello world!")
