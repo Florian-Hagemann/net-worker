@@ -3,6 +3,15 @@ from tkinter import simpledialog, ttk
 
 class MainWindow:
 
+    def updateEdgeTree(self):
+        for item in self.edgeTree.get_children():
+            self.edgeTree.delete(item)
+
+        for edge in self.service.graph.edges[self.combo.get()]:
+            self.edgeTree.insert("", tk.END, values=(self.service.getNodes()[edge].name, edge, self.service.graph.edges[self.combo.get()][edge]))
+        
+        self.edgeTree.pack(fill=tk.BOTH, expand=True)
+
     def updateNodeView(self):
         for item in self.tree.get_children():
             self.tree.delete(item)
@@ -26,8 +35,23 @@ class MainWindow:
         popup.title("Edit Edges")
         popup.geometry("250x150")
 
-        combo = ttk.Combobox(popup, values=self.service.get_node_names())
-        combo.pack()
+        frameEdgeButtons = tk.Frame(popup)
+        frameEdgeButtons.pack()
+
+        tk.Label(frameEdgeButtons, text="Source Node: ").pack(side="left")
+
+        self.combo = ttk.Combobox(frameEdgeButtons, values=self.service.get_node_names())
+        self.combo.pack(side="left")
+        self.combo.bind("<<ComboboxSelected>>", self.updateEdgeTree)
+
+        self.edgeTree = ttk.Treeview(popup, show="headings")
+        self.edgeTree["columns"] = ("Name", "Node", "Weight")
+        self.edgeTree.heading("ID", text="Node ID")
+        self.edgeTree.heading("Name", text="Node Name")
+        self.edgeTree.heading("Weight", text="Weight")
+
+        self.edgeTree.pack()
+
 
     def editNodes(self):
         popup = tk.Toplevel(self.root)
