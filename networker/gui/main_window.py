@@ -28,6 +28,13 @@ class MainWindow:
         self.root.title("net-worker")
         self.service = service
 
+        title_label = tk.Label(
+            self.root,
+            text="Net-Worker",
+            font=("Arial", 24, "bold")
+        )
+        title_label.pack(pady=10)
+
         # init frames
         self.frameButtons = tk.Frame(self.root)
         self.frameGraph = tk.Frame(self.root)
