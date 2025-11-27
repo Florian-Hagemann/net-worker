@@ -10,5 +10,8 @@ class Service:
         print(f"Added {nodeName} with the ID {node.id}")
         self.graph.addNode(node)
 
+    def getNodes(self):
+        return self.graph.nodes
+
     def placeholder(self):
         print("hello world!")
