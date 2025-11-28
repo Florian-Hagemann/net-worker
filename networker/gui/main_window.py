@@ -14,6 +14,8 @@ class MainWindow:
 
         destinationNodeSelector = ttk.Combobox(popup, values=destinationNodes)
         destinationNodeSelector.pack()
+        typeSelector = ttk.Combobox(popup, values=["ice", "regio"])
+        typeSelector.pack()
         
         def positive_ints(new_value):
             if new_value == "":
@@ -26,7 +28,7 @@ class MainWindow:
         entry.pack()
 
         def serviceCallAddEdge():
-            self.service.addEdge(self.service.get_node_id(self.combo.get()), self.service.get_node_id(destinationNodeSelector.get()), entry.get())
+            self.service.addEdge(self.service.get_node_id(self.combo.get()), self.service.get_node_id(destinationNodeSelector.get()), int(entry.get()), typeSelector.get())
             self.updateEdgeTree()
 
         tk.Button(popup, text="Add", command=serviceCallAddEdge).pack()

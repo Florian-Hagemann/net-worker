@@ -5,6 +5,9 @@ class Service:
     def __init__(self):
         self.graph = Graph()
     
+    def dijkstraAlgorithmus(self, startID, goalID):
+        print("digga")
+
     def addNode(self, nodeName):
         node = Node(nodeName)
         print(f"Added {nodeName} with the ID {node.id}")
@@ -14,9 +17,9 @@ class Service:
         print(f"Delete node {nodeId}")
         self.graph.deleteNode(self.graph.nodes[nodeId])
 
-    def addEdge(self, nodeA, nodeB, weight):
-        self.graph.addEdge(nodeA, nodeB, weight)
-        print(f"Edge added between {nodeA} and {nodeB} with weight = {weight}")
+    def addEdge(self, nodeA, nodeB, weight, routetype):
+        self.graph.addEdge(nodeA, nodeB, weight, routetype)
+        print(f"Edge added between {nodeA} and {nodeB}")
     
     def get_node_names(self):
         return [node.name for node in self.graph.nodes.values()]

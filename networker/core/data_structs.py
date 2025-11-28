@@ -1,5 +1,20 @@
 import uuid
 
+class Edge:
+    def __init__(self, distance, routetype):
+        self.distance = distance
+        self.type = routetype
+        
+        if self.type == "ice":
+            self.cost = 0,15 * self.distance
+            self.time = self.distance / 150
+        elif self.type == "regio":
+            self.cost = 0.07 * self.distance
+            self.time = self.distance / 90
+        
+        print(f"Created Edge \n Distance: {self.distance} \n Type: {self.type} \n Cost: {self.cost} \n Time: {self.time}")
+
+
 class Node:
     def __init__(self, name):
         self.name = name
@@ -20,7 +35,8 @@ class Graph:
         self.nodes.pop(node.id, None)
         self.edges.pop(node.id, None)
 
-    def addEdge(self, nodeIdA, nodeIdB, weight):
+    def addEdge(self, nodeIdA, nodeIdB, weight, routetype):
+        edge = Edge(weight, routetype)
         self.edges[nodeIdA][nodeIdB] = weight
         self.edges[nodeIdB][nodeIdA] = weight
     
