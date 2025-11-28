@@ -10,6 +10,10 @@ class Service:
         print(f"Added {nodeName} with the ID {node.id}")
         self.graph.addNode(node)
     
+    def deleteNode(self, nodeId):
+        print(f"Delete node {nodeId}")
+        self.graph.deleteNode(self.graph.nodes[nodeId])
+
     def addEdge(self, nodeA, nodeB, weight):
         self.graph.addEdge(nodeA, nodeB, weight)
         print(f"Edge added between {nodeA} and {nodeB} with weight = {weight}")

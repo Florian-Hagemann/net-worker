@@ -83,6 +83,22 @@ class MainWindow:
 
         self.edgeTree.pack()
 
+    def deleteNode(self):
+        popup = tk.Toplevel(self.root)
+        popup.title("Delete Node")
+        popup.geometry("250x150")
+
+        self.combo = ttk.Combobox(popup, values=self.service.get_node_names())
+        self.combo.pack()
+
+        def serviceCallDelete():
+            self.service.deleteNode(self.service.get_node_id(self.combo.get()))
+            self.updateNodeView()
+            popup.destroy()
+
+        tk.Button(popup, text="Delete", command=serviceCallDelete).pack()
+        tk.Button(popup, text="Close", command=popup.destroy).pack()
+
 
     def editNodes(self):
         popup = tk.Toplevel(self.root)
@@ -99,6 +115,7 @@ class MainWindow:
             tree.insert("", tk.END, values=(self.service.getNodes()[node].name, self.service.getNodes()[node].active, node))
 
         tree.pack(fill=tk.BOTH, expand=True)
+        tk.Button(popup, text="Delete Node", command=self.deleteNode).pack()
         tk.Button(popup, text="Close", command=popup.destroy).pack()
 
     def loadNetwork(self):
