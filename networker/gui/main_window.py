@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import simpledialog, ttk
+from tkinter import simpledialog, ttk, filedialog
 
 class MainWindow:
     def addEdge(self):
@@ -101,6 +101,36 @@ class MainWindow:
         tree.pack(fill=tk.BOTH, expand=True)
         tk.Button(popup, text="Close", command=popup.destroy).pack()
 
+    def loadNetwork(self):
+        # Open file dialog to choose a file
+        file_path = filedialog.askopenfilename(
+            title="Load Network",
+            filetypes=(("Pickle files", "*.pkl"), ("All files", "*.*"))
+        )
+        if not file_path:
+            return  # user canceled
+
+        try:
+            self.service.loadGraph(file_path)  # your service handles loading
+            self.updateNodeView()
+            if hasattr(self, "edgeTree"):
+                self.updateEdgeTree()
+            print(f"Network loaded from {file_path}")
+        except Exception as e:
+            print("Error loading network:", e)
+
+
+    def saveGraph(self):
+        file_path = filedialog.asksaveasfilename(
+            title="Save file",
+            defaultextension=".pkl",
+            filetypes=(("Pickle files", "*.pkl"), ("All files", "*.*"))
+        )
+
+        if file_path:
+            print("Save as:", file_path)
+            self.service.saveGraph(file_path)
+
     def __init__(self, service):
         self.root = tk.Tk()
         self.root.title("net-worker")
@@ -128,8 +158,8 @@ class MainWindow:
         self.updateNodeView()
 
         # add stuff to frames
-        tk.Button(self.frameButtons, text="Load Network", command=service.placeholder).pack(pady=5, side="left")
-        tk.Button(self.frameButtons, text="Save Network", command=service.placeholder).pack(pady=5, side="left")
+        tk.Button(self.frameButtons, text="Load Network", command=self.loadNetwork).pack(pady=5, side="left")
+        tk.Button(self.frameButtons, text="Save Network", command=self.saveGraph).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Find Route", command=service.placeholder).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Add Node", command=self.addNode).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Edit Nodes", command=self.editNodes).pack(pady=5, side="left")

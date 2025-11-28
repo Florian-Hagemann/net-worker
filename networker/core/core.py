@@ -1,4 +1,4 @@
-from .loader import *
+import pickle
 from .data_structs import Graph, Node
 
 class Service:
@@ -26,6 +26,15 @@ class Service:
 
     def getNodes(self):
         return self.graph.nodes
+
+    def saveGraph(self, file):
+        with open(file, "wb") as f:
+            pickle.dump(self.graph, f)
+
+    def loadGraph(self, file):
+
+        with open(file, "rb") as f:
+            self.graph = pickle.load(f)
 
     def placeholder(self):
         print("hello world!")
