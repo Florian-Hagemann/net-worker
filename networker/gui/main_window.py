@@ -2,13 +2,42 @@ import tkinter as tk
 from tkinter import simpledialog, ttk
 
 class MainWindow:
+    def addEdge(self):
+        popup = tk.Toplevel(self.root)
+        popup.title("Add Edge")
+        popup.geometry("250x150")
 
-    def updateEdgeTree(self):
+        destinationNodes = []
+        for node in self.service.getNodes().values():
+            if node.name != self.combo.get():
+                destinationNodes.append(node.name)
+
+        destinationNodeSelector = ttk.Combobox(popup, values=destinationNodes)
+        destinationNodeSelector.pack()
+        
+        def positive_ints(new_value):
+            if new_value == "":
+                return True   # allow empty so user can type
+            return new_value.isdigit() and new_value != "0"  # no zero if you want strictly positive
+
+        vcmd = (popup.register(positive_ints), "%P")
+
+        entry = tk.Entry(popup, validate="key", validatecommand=vcmd)
+        entry.pack()
+
+        def serviceCallAddEdge():
+            self.service.addEdge(self.service.get_node_id(self.combo.get()), self.service.get_node_id(destinationNodeSelector.get()), entry.get())
+            self.updateEdgeTree()
+
+        tk.Button(popup, text="Add", command=serviceCallAddEdge).pack()
+        tk.Button(popup, text="Close", command=popup.destroy).pack()
+  
+    def updateEdgeTree(self, event=None):
         for item in self.edgeTree.get_children():
             self.edgeTree.delete(item)
 
-        for edge in self.service.graph.edges[self.combo.get()]:
-            self.edgeTree.insert("", tk.END, values=(self.service.getNodes()[edge].name, edge, self.service.graph.edges[self.combo.get()][edge]))
+        for edge in self.service.graph.edges[self.service.get_node_id(self.combo.get())]:
+            self.edgeTree.insert("", tk.END, values=(self.service.getNodes()[edge].name, edge, self.service.graph.edges[self.service.get_node_id(self.combo.get())][edge]))
         
         self.edgeTree.pack(fill=tk.BOTH, expand=True)
 
@@ -44,8 +73,10 @@ class MainWindow:
         self.combo.pack(side="left")
         self.combo.bind("<<ComboboxSelected>>", self.updateEdgeTree)
 
+        tk.Button(frameEdgeButtons, text="Add Edge", command=self.addEdge).pack(side="left")
+
         self.edgeTree = ttk.Treeview(popup, show="headings")
-        self.edgeTree["columns"] = ("Name", "Node", "Weight")
+        self.edgeTree["columns"] = ("Name", "ID", "Weight")
         self.edgeTree.heading("ID", text="Node ID")
         self.edgeTree.heading("Name", text="Node Name")
         self.edgeTree.heading("Weight", text="Weight")
