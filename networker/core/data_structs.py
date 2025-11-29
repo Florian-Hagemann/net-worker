@@ -2,13 +2,13 @@ import uuid
 
 class Edge:
     def __init__(self, distance, routetype):
-        self.distance = distance
+        self.distance = float(distance)
         self.type = routetype
         
         if self.type == "ice":
-            self.cost = 0,15 * self.distance
+            self.cost = 0.15 * self.distance
             self.time = self.distance / 150
-        elif self.type == "regio":
+        else:
             self.cost = 0.07 * self.distance
             self.time = self.distance / 90
         
@@ -37,8 +37,8 @@ class Graph:
 
     def addEdge(self, nodeIdA, nodeIdB, weight, routetype):
         edge = Edge(weight, routetype)
-        self.edges[nodeIdA][nodeIdB] = weight
-        self.edges[nodeIdB][nodeIdA] = weight
+        self.edges[nodeIdA][nodeIdB] = edge
+        self.edges[nodeIdB][nodeIdA] = edge
     
     def deleteEdge(self, nodeIdA, nodeIdB):
         self.edges[nodeIdA].discard(nodeIdB)

@@ -2,6 +2,64 @@ import tkinter as tk
 from tkinter import simpledialog, ttk, filedialog
 
 class MainWindow:
+    def findRoute(self):
+        popup = tk.Toplevel(self.root)
+        popup.title("Find Route")
+        popup.geometry("300x250")
+
+        # --- Start Node Selector ---
+        tk.Label(popup, text="Start Node:").pack()
+        startCombo = ttk.Combobox(popup, values=self.service.get_node_names())
+        startCombo.pack()
+
+        # --- Goal Node Selector ---
+        tk.Label(popup, text="Goal Node:").pack()
+        goalCombo = ttk.Combobox(popup, values=self.service.get_node_names())
+        goalCombo.pack()
+
+        # --- Weight Type Selector ---
+        tk.Label(popup, text="Optimize by:").pack()
+        weightCombo = ttk.Combobox(popup, values=["cost", "time", "distance"])
+        weightCombo.set("cost")
+        weightCombo.pack()
+
+        # --- Button that runs Dijkstra ---
+        def run():
+            start_name = startCombo.get()
+            goal_name = goalCombo.get()
+            weight_type = weightCombo.get()
+
+            startID = self.service.get_node_id(start_name)
+            goalID = self.service.get_node_id(goal_name)
+
+            if not startID or not goalID:
+                tk.messagebox.showerror("Error", "Please choose valid nodes.")
+                return
+
+            path, dist, log = self.service.dijkstra_with_log(startID, goalID, weight_type)
+            latex = self.service.dijkstra_log_to_latex(log)
+
+            # Show result in a new window
+            result = tk.Toplevel(self.root)
+            result.title("Route Result")
+            result.geometry("700x600")
+
+            # Path label
+            tk.Label(result, text=f"Shortest path ({weight_type}):", font=("Arial", 12, "bold")).pack()
+
+            path_names = " → ".join([self.service.getNodes()[nid].name for nid in path])
+            tk.Label(result, text=path_names).pack()
+
+            tk.Label(result, text=f"Total {weight_type}: {dist}").pack()
+
+            # LaTeX box
+            textBox = tk.Text(result, wrap="word")
+            textBox.pack(fill="both", expand=True)
+            textBox.insert("1.0", latex)
+
+        tk.Button(popup, text="Calculate", command=run).pack(pady=10)
+        tk.Button(popup, text="Close", command=popup.destroy).pack()
+
     def addEdge(self):
         popup = tk.Toplevel(self.root)
         popup.title("Add Edge")
@@ -179,7 +237,7 @@ class MainWindow:
         # add stuff to frames
         tk.Button(self.frameButtons, text="Load Network", command=self.loadNetwork).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Save Network", command=self.saveGraph).pack(pady=5, side="left")
-        tk.Button(self.frameButtons, text="Find Route", command=service.placeholder).pack(pady=5, side="left")
+        tk.Button(self.frameButtons, text="Find Route", command=self.findRoute).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Add Node", command=self.addNode).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Edit Nodes", command=self.editNodes).pack(pady=5, side="left")
         tk.Button(self.frameButtons, text="Edit Edges", command=self.editEdges).pack(pady=5, side="left")
