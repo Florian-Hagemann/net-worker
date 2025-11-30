@@ -37,7 +37,7 @@ class MainWindow:
                 return
 
             path, dist, log = self.service.dijkstra_with_log(startID, goalID, weight_type)
-            latex = self.service.dijkstra_log_to_latex(log)
+            latex = self.service.dijkstra_log_to_latex(log, startID, goalID)
 
             # Show result in a new window
             result = tk.Toplevel(self.root)
